@@ -1,10 +1,11 @@
 ---
 layout: page
-title: projects
+title: Projects
 permalink: /projects/
-description: Work I did to answer a question I could not settle by reading.
+description: Work undertaken to settle a question I could not answer by reading. Each write-up states its method, its results and its limitations.
 nav: true
 nav_order: 1
+display_categories: ["Machine Learning Systems", "Machine Learning Theory", "Quantitative and Scientific Computing"]
 horizontal: false
 ---
 

@@ -1,17 +1,35 @@
 ---
 layout: page
-title: reconstructing the Z boson
-description: invariant-mass reconstruction from ATLAS open data, with a team of five
+title: Invariant-Mass Reconstruction of the Z Boson from ATLAS Open Data
+description: A school research project leading a team of five through the dilepton and four-lepton decay channels, presented at the University of Oxford.
 importance: 6
-category: physics
+category: Quantitative and Scientific Computing
+toc:
+  sidebar: left
 ---
 
-[Repository](https://github.com/404-ammar-not-found/Large-Scale-Particle-Collision-Data-Analysis-with-ATLAS)
+**Repository:** [404-ammar-not-found/Large-Scale-Particle-Collision-Data-Analysis-with-ATLAS](https://github.com/404-ammar-not-found/Large-Scale-Particle-Collision-Data-Analysis-with-ATLAS) · **Written in:** Python, NumPy, pandas, matplotlib · **Period:** September 2023 to June 2024
 
-This was my first computational research project, run between September 2023 and June 2024 while I was still at school, and I led a team of five. The goal was to recover the invariant mass of the Z boson through its two main leptonic decay routes using the ATLAS open data release.
+This was my first computational research project, undertaken while I was still at school. I led a team of five students in recovering the invariant mass of the Z boson through its two principal leptonic decay routes, using the ATLAS open data release.
 
-The method is the standard one for this analysis. Loop over events, keep pairs of opposite-charge same-flavour leptons, build the invariant mass from the Lorentz four-vectors of the selected leptons, and histogram it. Both the two-lepton and the four-lepton channel produce a clear peak, the two channels agree with each other, and the peak sits at the published Z mass. Getting the event selection right was most of the work: without the charge and flavour cuts the combinatorial background buries the signal entirely.
+## Data
 
-One point of accuracy that the poster states and that I want to repeat here: the events we analysed were simulated Standard Model Monte Carlo samples for Z decaying to two leptons and ZZ decaying to four leptons, not recorded collision data. That is what the teaching version of the ATLAS exercise provides, and it means this reproduces a known result rather than measuring anything new.
+The events analysed were simulated Standard Model Monte Carlo samples, covering Z decaying to two leptons and ZZ decaying to four leptons, rather than recorded collision data. That is what the teaching release of the ATLAS exercise provides. The consequence is worth stating directly: this reproduces a known result under conditions where the correct answer is already established, so it demonstrates that the analysis chain is sound and does not measure anything new.
 
-We presented the work at the University of Oxford and at a physics conference in London. The analysis was written in NumPy, pandas and matplotlib in Jupyter, and the repository holds only the poster, because at the time I did not think to commit the code. That is the main thing I would do differently, and it is why every project since has the notebooks in version control.
+## Method
+
+The reconstruction is the standard one. Iterate over events; retain lepton pairs which are same-flavour and opposite-charge; compute the invariant mass from the Lorentz four-vectors of the selected leptons; and histogram the result across the sample.
+
+Most of the work was in the selection rather than the arithmetic. Without the charge and flavour requirements, combinatorial pairings of unrelated leptons dominate the histogram and bury the peak completely, so the cuts are what make the signal visible at all. Working out which requirements were physically motivated, as opposed to merely convenient for producing a clean plot, was the part of the project I learned most from.
+
+## Results
+
+Both the two-lepton and the four-lepton channel produce a clear mass peak. The two channels agree with one another, and the peak position is consistent with the published value for the Z boson mass. Since the two channels have different backgrounds and different reconstruction paths, their agreement is a stronger check on the analysis than either channel alone.
+
+## Dissemination
+
+The team presented the work at the University of Oxford and at a physics conference in London.
+
+## Limitations
+
+The repository contains only the conference poster. The analysis itself was written in NumPy, pandas and matplotlib within Jupyter, but was never committed, so nothing here is reproducible and the numerical results cannot be recovered from the text of the poster. That is the main thing I would do differently, and it is the reason every project since has its notebooks under version control.

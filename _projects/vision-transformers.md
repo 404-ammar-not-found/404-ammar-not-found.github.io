@@ -1,17 +1,39 @@
 ---
 layout: page
-title: vision transformers from scratch
-description: rebuilding ViT-Base from the paper, finetuning it on Flowers-102, and looking at where its attention goes
+title: Reconstructing ViT-Base from Specification and Probing Its Attention
+description: A parameter-exact rebuild of the Vision Transformer, a transfer-learning study on Oxford Flowers-102, and a per-head view of what the first block attends to.
 importance: 4
-category: interpretability
+category: Machine Learning Theory
+toc:
+  sidebar: left
 ---
 
-[Repository](https://github.com/404-ammar-not-found/vision-transformer-interpretability)
+**Repository:** [404-ammar-not-found/vision-transformer-interpretability](https://github.com/404-ammar-not-found/vision-transformer-interpretability) · **Written in:** Python, PyTorch · **Period:** November 2025 to June 2026
 
-Reading the ViT paper did not tell me what the patch embedding actually does to an image, so I rebuilt the architecture from the paper's own specification: patch embedding as a strided convolution, the class token, learned position embeddings, multi-head self-attention, the MLP block, and the residual structure around both. The test of whether a rebuild is faithful is the parameter count, so I checked mine against the published ViT-Base configuration. `torchinfo` puts the assembled model at 85,877,094 parameters and 22.09 GMACs, with the `Conv2d(3, 768, kernel 16, stride 16)` patch embedding accounting for 590,592 of them. Those summaries are committed next to the notebooks.
+Reading the Vision Transformer paper explains the architecture without explaining what the patch embedding does to an image, which is the part that decides whether the rest of the model has anything useful to attend to. This project works through the architecture in three stages: rebuilding ViT-Base from its published specification, transferring a pretrained instance to a fine-grained classification task, and then examining the attention distribution of its first block head by head.
 
-A second notebook finetunes a pretrained ViT-Base on Oxford Flowers-102, replacing the classifier head and freezing the backbone. The committed confusion matrix shows a strong diagonal across the test split, so the transfer worked. I should be clear about how that result got there: the training ran in Colab and the outputs were pasted back into the notebook, so the version in the repository does not reproduce the run, and no accuracy scalar is recorded anywhere.
+## Rebuilding the architecture
 
-The third notebook asks where attention goes. It takes the class-token-to-patch scores from the first transformer block, splits them per head, and reshapes each onto the 14x14 patch grid so the heads can be compared side by side on the same image. Different heads clearly attend to different regions. This is a single layer and a single image, and it plots the raw query-key products rather than a full attention rollout across blocks, so it shows head specialisation without saying anything about how attention composes with depth.
+The rebuild covers the patch embedding as a strided convolution, the prepended class token, learned position embeddings, multi-head self-attention, the feedforward block, and the residual and normalisation structure around both.
 
-Two pieces are outstanding. The from-scratch training configuration as written never trains: a batch size of 4096 against the 1,020-image Flowers-102 train split gives one batch per epoch, and with seven epochs the learning-rate warmup of 10,000 steps means the rate never leaves its floor. Fixing that and training the rebuild properly is the first job. The second is implementing rollout over all twelve blocks, which is the version of this that would actually explain a prediction.
+The test of whether a rebuild is faithful is not whether it trains, since a wrong architecture will still descend a loss. It is whether the parameter count matches the published configuration exactly, because that quantity is determined jointly by embedding dimension, depth, head count and feedforward width, and an error in any of them shifts it. Under `torchinfo` the assembled model reports 85,877,094 parameters and 22.09 GMACs, with the `Conv2d(3, 768, kernel 16, stride 16)` patch embedding accounting for 590,592 of them. Both summaries are committed alongside the notebooks so the figures can be checked rather than trusted.
+
+## Transfer to Oxford Flowers-102
+
+The second stage takes a pretrained ViT-Base, replaces the classifier head for the 102 flower classes, and freezes the backbone so that only the head trains. The committed confusion matrix shows a strong diagonal across the test split, so the transfer succeeded.
+
+The provenance of that result needs stating. Training ran in Google Colab and the outputs were pasted back into the notebook rather than executed in place, so the committed notebook does not reproduce the run, and no accuracy scalar is recorded anywhere in the repository. The confusion matrix is evidence that it worked; it is not a measurement of how well.
+
+## Attention in the first block
+
+The third notebook extracts the class-token-to-patch attention scores from the first transformer block, separates them by head, and reshapes each onto the 14x14 patch grid so that all heads can be compared on the same image. Individual heads attend to visibly different regions, which is the expected head specialisation and is the point of looking per head rather than at an average.
+
+The scope here is narrower than the word interpretability suggests. This is one layer of twelve, one image, and the raw query-key products before the softmax rather than normalised attention weights. It shows that heads differ. It says nothing about how attention composes across depth, and it is not attention rollout, which the notebook headers mention but which is not implemented.
+
+## Limitations
+
+The from-scratch training configuration as written cannot train. A batch size of 4096 against the 1,020-image Flowers-102 training split yields a single batch per epoch, and with seven epochs the learning-rate warmup of 10,000 steps holds the rate at a small fraction of its base value for the entire run. The rebuild is therefore verified structurally, by parameter count, but has never been trained to convergence.
+
+## Current work
+
+Correcting the batch size and warmup schedule so the rebuild can be trained and compared against the pretrained model, and implementing rollout across all twelve blocks, which is the version of this analysis that could actually attribute a prediction to a region of the input.
