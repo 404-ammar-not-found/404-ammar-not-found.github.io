@@ -14,6 +14,7 @@ cv:
 
   address:
     city: London
+    region: United Kingdom
     countryCode: GB
 
   sections:
@@ -27,6 +28,8 @@ cv:
         end_date: 2028-06
         score: Projected First Class Honours
         courses: "Probability I, MFA, Statistics I, Data Science, Introduction to Programming I (Python), Introduction to Programming II (Java), First Year Team Project"
+        highlights:
+          - Projected degree classification: First Class Honours.
 
     Experience:
       - company: Mubit-AI
