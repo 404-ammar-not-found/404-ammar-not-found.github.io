@@ -1,0 +1,142 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> vision transformers from scratch | Ammar Nagri </title> <meta name="author" content="Ammar M Nagri"> <meta name="description" content="rebuilding ViT-Base from the paper, finetuning it on Flowers-102, and looking at where its attention goes"> <meta name="keywords" content="machine learning, neural networks, diffusion models, theoretical machine learning, computer science, mathematics, research engineer, research scientist"> <meta property="og:site_name" content="Ammar Nagri"> <meta property="og:type" content="website"> <meta property="og:title" content="Ammar Nagri | vision transformers from scratch"> <meta property="og:url" content="https://404-ammar-not-found.github.io/projects/4_vision-transformers/"> <meta property="og:description" content="rebuilding ViT-Base from the paper, finetuning it on Flowers-102, and looking at where its attention goes"> <meta property="og:image" content="/assets/img/prof_pic_color.png"> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary"> <meta name="twitter:title" content="vision transformers from scratch"> <meta name="twitter:description" content="rebuilding ViT-Base from the paper, finetuning it on Flowers-102, and looking at where its attention goes"> <meta name="twitter:image" content="/assets/img/prof_pic_color.png"> <script type="application/ld+json">
+    {
+        "author":
+        {
+            "@type": "Person",
+            "name": "Ammar M Nagri"
+        },
+        "url": "https://404-ammar-not-found.github.io/projects/4_vision-transformers/",
+        "@type": "WebSite",
+        "description": "rebuilding ViT-Base from the paper, finetuning it on Flowers-102, and looking at where its attention goes",
+        "headline": "vision transformers from scratch",
+        
+        "sameAs": [null,"https://github.com/404-ammar-not-found","https://www.linkedin.com/in/ammarnagri"],
+        
+        "name": "Ammar M Nagri",
+        "@context": "https://schema.org"
+    }
+  </script> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://404-ammar-not-found.github.io/projects/4_vision-transformers/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Ammar Nagri </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/projects/">projects <span class="sr-only">(current)</span> </a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">CV </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">vision transformers from scratch</h1> <p class="post-description">rebuilding ViT-Base from the paper, finetuning it on Flowers-102, and looking at where its attention goes</p> </header> <article> <p><a href="https://github.com/404-ammar-not-found/vision-transformer-interpretability" rel="external nofollow noopener" target="_blank">Repository</a></p> <p>Reading the ViT paper did not tell me what the patch embedding actually does to an image, so I rebuilt the architecture from the paper’s own specification: patch embedding as a strided convolution, the class token, learned position embeddings, multi-head self-attention, the MLP block, and the residual structure around both. The test of whether a rebuild is faithful is the parameter count, so I checked mine against the published ViT-Base configuration. <code class="language-plaintext highlighter-rouge">torchinfo</code> puts the assembled model at 85,877,094 parameters and 22.09 GMACs, with the <code class="language-plaintext highlighter-rouge">Conv2d(3, 768, kernel 16, stride 16)</code> patch embedding accounting for 590,592 of them. Those summaries are committed next to the notebooks.</p> <p>A second notebook finetunes a pretrained ViT-Base on Oxford Flowers-102, replacing the classifier head and freezing the backbone. The committed confusion matrix shows a strong diagonal across the test split, so the transfer worked. I should be clear about how that result got there: the training ran in Colab and the outputs were pasted back into the notebook, so the version in the repository does not reproduce the run, and no accuracy scalar is recorded anywhere.</p> <p>The third notebook asks where attention goes. It takes the class-token-to-patch scores from the first transformer block, splits them per head, and reshapes each onto the 14x14 patch grid so the heads can be compared side by side on the same image. Different heads clearly attend to different regions. This is a single layer and a single image, and it plots the raw query-key products rather than a full attention rollout across blocks, so it shows head specialisation without saying anything about how attention composes with depth.</p> <p>Two pieces are outstanding. The from-scratch training configuration as written never trains: a batch size of 4096 against the 1,020-image Flowers-102 train split gives one batch per epoch, and with seven epochs the learning-rate warmup of 10,000 steps means the rate never leaves its floor. Fixing that and training the rebuild properly is the first job. The second is implementing rollout over all twelve blocks, which is the version of this that would actually explain a prediction.</p> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Ammar M Nagri. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-projects",
+          title: "projects",
+          description: "Work I did to answer a question I could not settle by reading.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Ammar Nagri&#39;s CV and academic profile.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
+        },{id: "projects-jaxmetal",
+          title: 'jaxmetal',
+          description: "hand-written Metal kernels that train a neural network entirely on the Apple GPU",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/1_jaxmetal/";
+            },},{id: "projects-the-lottery-ticket-hypothesis",
+          title: 'the lottery ticket hypothesis',
+          description: "iterative magnitude pruning with the ablation controls the hypothesis actually requires",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/2_lottery-ticket/";
+            },},{id: "projects-retrieval-over-research-papers",
+          title: 'retrieval over research papers',
+          description: "a RAG pipeline whose 3D vector-store view shows which chunks grounded each answer",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/3_rag-for-research/";
+            },},{id: "projects-vision-transformers-from-scratch",
+          title: 'vision transformers from scratch',
+          description: "rebuilding ViT-Base from the paper, finetuning it on Flowers-102, and looking at where its attention goes",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/4_vision-transformers/";
+            },},{id: "projects-changes-in-stock-market-structure",
+          title: 'changes in stock market structure',
+          description: "correlation-network structure of the S&amp;P 500 over 21 years, built from point-in-time index membership",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/5_market-structure/";
+            },},{id: "projects-reconstructing-the-z-boson",
+          title: 'reconstructing the Z boson',
+          description: "invariant-mass reconstruction from ATLAS open data, with a team of five",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/6_z-boson/";
+            },},{
+        id: 'social-cv',
+        title: 'CV',
+        section: 'Socials',
+        handler: () => {
+          window.open("/assets/pdf/CV.pdf", "_blank");
+        },
+      },{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%61%6D%6D%61%72.%6E%61%67%72%69%31@%67%6D%61%69%6C.%63%6F%6D", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/404-ammar-not-found", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/ammarnagri", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
