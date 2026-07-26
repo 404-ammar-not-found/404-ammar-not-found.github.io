@@ -1,10 +1,10 @@
 cv:
   name: Ammar Nagri
-  label: BSc Computer Science & Mathematics undergraduate
+  label: BSc Computer Science and Mathematics undergraduate
   email: ammar.nagri1@gmail.com
   location: London, GB
   image: /assets/img/prof_pic.jpg
-  summary: BSc Computer Science and Mathematics undergraduate focused on theoretical machine learning, diffusion models, and neural networks.
+  summary: Computer Science and Mathematics undergraduate at The University of Manchester, working on theoretical machine learning, neural networks and diffusion models.
 
   social_networks:
     - network: GitHub
@@ -25,11 +25,8 @@ cv:
         studyType: Bachelor of Science
         start_date: 2025-09
         end_date: 2028-06
-        score: Expected First Class with Honours
-        courses: "Probability I, MFA, Statistics I, Data Science, Intro to Programming I (Python), Intro to Programming II (Java), First Year Team Project"
-        highlights:
-          - Interested in theoretical machine learning, diffusion models, and neural networks.
-          - Building a strong foundation in mathematics and software engineering.
+        score: Projected First Class Honours
+        courses: "Probability I, MFA, Statistics I, Data Science, Introduction to Programming I (Python), Introduction to Programming II (Java), First Year Team Project"
 
     Experience:
       - company: Mubit-AI
@@ -37,109 +34,78 @@ cv:
         location: London, GB
         start_date: 2026-07
         end_date: 2026-09
-        summary: Worked on model recommender prompting and an SDK in C++ for retaining conversation context.
         highlights:
-          - Rewrote a prompt-to-model recommender for token reduction, lowering latency by up to 7x with 70% accuracy.
-          - Designed an SDK in C++ to store previous conversations and improve context retention.
+          - Optimised memory retrieval by replacing an O(session size) scan with a near O(limit) reverse scan, achieving up to 2,500x faster limited-history lookups while preserving identical behaviour and chronological ordering.
+          - Improved storage by implementing tiered per-column-family Zstd compression, reducing disk usage by 35% with minimal latency impact.
 
       - company: Level2
         position: Machine Learning Intern
         location: New York, NY (Remote)
         start_date: 2026-01
         end_date: 2026-04
-        summary: Built regime classification and live forecasting systems for market data.
         highlights:
-          - Built a Gaussian HMM classifier for intra-day market regime detection.
-          - Developed a live regime forecaster using temporal convolutional networks and PatchTST with Monte Carlo dropout, achieving an AUC of 76.1% on SPY.
-          - Presented findings to fellow students and started preparing for startup presentations.
+          - Built a Gaussian hidden Markov model classifier for the regime of intra-day market data.
+          - Developed a live regime forecaster using temporal convolutional networks and PatchTST architectures, using Monte Carlo dropout for Bayesian uncertainty decomposition, achieving an AUC of 76.1% on SPY.
+          - Presented my findings alongside fellow students, and am currently working on presenting to more financial startups.
 
-      - company: JustEat Takeaway
+      - company: JustEat Takeaway (formerly Flyt)
         position: Software Engineer
         location: London, GB
         start_date: 2022-08
         end_date: 2022-08
-        summary: Improved a core microservice and built an order analytics endpoint.
         highlights:
-          - Optimised a core Go microservice with benchmarking and pprof profiling, achieving about 4x latency improvement, 3x fewer allocations, and 2x lower RSS memory usage.
-          - Designed and implemented an HTTP endpoint for an order analytics microservice, supporting about 700,000 daily requests.
-          - Wrote unit tests with httptest and validated the service with Postman-based integration testing.
+          - Conducted Go benchmarking and pprof CPU and memory profiling to optimise a core microservice, achieving a 4x latency improvement, 3x fewer allocations and a 2x reduction in RSS memory usage.
+          - Designed and implemented an HTTP endpoint for an order analytics microservice, handling query parsing, SQL database access and robust error handling, defined through OpenAPI specifications and supporting 700,000 daily requests.
+          - Developed unit tests using httptest and validated functionality through Postman-based integration testing.
 
       - company: Manchester AI Society, The University of Manchester
         position: Project Leader
         location: Manchester, GB
         start_date: 2025-09
         end_date: present
-        summary: Led machine learning workshops and built a multiplayer poker backend.
         highlights:
-          - Taught machine learning to 75+ students with a 76% retention rate.
-          - Organised a computational poker competition and delivered a game theory workshop.
-          - Architected a real-time multiplayer backend with FastAPI and WebSockets.
-          - Optimised core rule evaluation to 4M+ ops/s and supported 40+ concurrent clients.
-
-    Awards:
-      - title: International Olympiad of AI - Silver
-        authors:
-          - International Olympiad of AI
-        date: 2025-04
-        awarder: International Olympiad of AI
-        summary: Awarded Silver based on examination performance.
-
-      - title: UKMT Mathematics Challenge Gold Awards
-        authors:
-          - UKMT
-        date: 2024
-        awarder: UKMT
-        summary: Multiple Gold Awards across the Junior, Intermediate, and Senior Mathematics Challenges.
-
-    Skills:
-      - name: Programming Languages
-        level: Advanced
-        icon: fa-solid fa-code
-        keywords: "Python, Java, PostgreSQL, MySQL, Golang, R, TypeScript, C++, JavaScript, LaTeX"
-
-      - name: Frameworks and Tooling
-        level: Advanced
-        icon: fa-solid fa-gears
-        keywords: "PyTorch, TensorFlow, FastAPI, Pydantic, Docker, Git, Weights & Biases, AWS, pytest, pprof"
-
-      - name: Libraries
-        level: Advanced
-        icon: fa-solid fa-layer-group
-        keywords: "NumPy, Pandas, matplotlib, scikit-learn, OpenCV, Hugging Face Transformers"
-
-      - name: Machine Learning
-        level: Advanced
-        icon: fa-solid fa-brain
-        keywords: "theoretical machine learning, diffusion models, neural networks, time series, uncertainty estimation"
-
-      - name: Mathematics
-        level: Advanced
-        icon: fa-solid fa-square-root-variable
-        keywords: "probability, statistics, linear algebra, calculus, optimisation"
+          - Led workshops teaching machine learning to students, averaging 75 or more students with a 76% retention rate.
+          - Architected and built an authoritative real-time multiplayer backend for poker using FastAPI and WebSockets.
+          - Optimised core components to reach 4M or more operations per second in rule evaluation, supporting 40 or more concurrent clients.
 
     Projects:
       - name: Changes in Stock Market Structure
-        summary: Data pipeline and network analysis project for evolving market structure.
-        highlights:
-          - Built a pipeline to ingest S&P 500 constituents and Polygon market data.
-          - Modeled structure with Graphical Lasso, Affinity Propagation, and MDS-based visualisations.
+        summary: "Python, pandas, NumPy, scikit-learn, matplotlib, seaborn"
         start_date: 2026-06
         end_date: 2026-06
+        highlights:
+          - Built a data pipeline to ingest S&P 500 historical constituents and Polygon market data, filtering prices to each stock's membership window before computing daily return correlation matrices and sector-level heatmaps.
+          - Modelled evolving market structure with Graphical Lasso sparse partial-correlation networks and Affinity Propagation clustering, visualising annual changes through MDS-based network layouts and animated frames.
 
       - name: Particle Collision Data Analysis with ATLAS
-        summary: Team project reconstructing the Z0 boson and estimating invariant mass.
-        highlights:
-          - Led a team of 5 students using NumPy, pandas, Jupyter, Git, and matplotlib.
-          - Presented findings at the University of Oxford and at a London physics conference.
+        summary: "NumPy, pandas, Jupyter, Git, matplotlib"
         start_date: 2023-09
         end_date: 2024-06
+        highlights:
+          - Led a team of 5 students to reconstruct the Z0 boson and calculate its invariant mass using NumPy and pandas.
+          - Attended a masterclass at the University of Oxford, presenting and defending our methodology and findings.
+          - Co-authored a research poster and delivered a poster presentation at a London physics conference.
 
-    Interests:
-      - name: Machine Learning
-        icon: fa-solid fa-brain
-        keywords: "theoretical machine learning, neural networks, diffusion models, time series, uncertainty"
+    Competitions and Awards:
+      - title: International Olympiad of AI, Silver
+        date: 2025-04
+        awarder: International Olympiad of AI
+        summary: Awarded Silver on examination performance.
 
-    References:
-      - name: Available on request
-        icon: fa-solid fa-envelope
-        reference: References available on request.
+      - title: UKMT Junior, Intermediate and Senior Mathematics Challenges
+        date: 2024
+        awarder: United Kingdom Mathematics Trust
+        summary: Multiple Gold Awards across the Junior, Intermediate and Senior challenges between 2018 and 2024.
+
+    Technical Skills:
+      - name: Languages
+        icon: fa-solid fa-code
+        keywords: "Python, Java, PostgreSQL, MySQL, Golang, R, TypeScript, C++, JavaScript, LaTeX"
+
+      - name: Libraries
+        icon: fa-solid fa-layer-group
+        keywords: "NumPy, pandas, matplotlib, scikit-learn, OpenCV, Hugging Face Transformers"
+
+      - name: Frameworks and Tooling
+        icon: fa-solid fa-gears
+        keywords: "PyTorch, TensorFlow, FastAPI, Pydantic, Docker, Git, Weights & Biases, AWS, pytest, pprof"

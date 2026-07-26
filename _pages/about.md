@@ -39,7 +39,9 @@ I approach these by implementing rather than only reading. When a paper reports 
 
 My applied work has been in quantitative modelling and backend systems.
 
-At Level2 I built a Gaussian hidden Markov model for intra-day market regime detection, then a live regime forecaster combining temporal convolutional networks with PatchTST, using Monte Carlo dropout to obtain uncertainty estimates rather than point predictions. It reached 76.1% AUC on SPY. At Mubit-AI I rewrote a prompt-to-model recommender to reduce token consumption, and designed an SDK in C++ to store previous conversations and improve context retention. At JustEat Takeaway I profiled a core Go microservice with `pprof` and benchmarking, then implemented an HTTP endpoint for an order analytics service handling on the order of 700,000 requests per day.
+At Level2 I built a Gaussian hidden Markov model for intra-day market regime detection, then a live regime forecaster combining temporal convolutional networks with PatchTST, using Monte Carlo dropout for Bayesian uncertainty decomposition rather than point predictions alone. It reached an AUC of 76.1% on SPY.
+
+At Mubit-AI the work was performance and storage. I replaced an O(session size) scan of conversation memory with a near O(limit) reverse scan, which made limited-history lookups up to 2,500 times faster while preserving identical behaviour and chronological ordering, and implemented tiered per-column-family Zstd compression that cut disk usage by 35% at minimal latency cost. At JustEat Takeaway I profiled a core Go microservice with benchmarking and `pprof`, reaching a 4x latency improvement with 3x fewer allocations, and implemented an HTTP endpoint for an order analytics service specified through OpenAPI and serving 700,000 requests a day.
 
 ## Teaching and outreach
 

@@ -28,7 +28,7 @@ Both the two-lepton and the four-lepton channel produce a clear mass peak. The t
 
 ## Dissemination
 
-The team presented the work at the University of Oxford and at a physics conference in London.
+The team attended a masterclass at the University of Oxford, where we presented the analysis and defended the methodology and findings under questioning. We also co-authored a research poster and delivered a poster presentation at a physics conference in London.
 
 ## Limitations
 
