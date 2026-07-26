@@ -1,10 +1,8 @@
 name: Update Google Scholar Citations
 
+# Manual only until there is a Google Scholar profile to read. Re-enable the cron
+# after setting scholar_userid in _data/socials.yml.
 on:
-  schedule:
-    - cron: "0 0 * * 1" # Monday
-    - cron: "0 0 * * 3" # Wednesday
-    - cron: "0 0 * * 5" # Friday
   workflow_dispatch:
 
 jobs:

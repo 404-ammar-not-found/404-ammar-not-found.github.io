@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: BSc Computer Science & Mathematics undergraduate | learning my machine
+subtitle: BSc Computer Science & Mathematics, The University of Manchester
 
 profile:
   align: right
@@ -17,21 +17,22 @@ selected_papers: false # turn off until you have publication entries to highligh
 social: true # includes social icons at the bottom of the page
 
 announcements:
-  enabled: true # includes a list of news items
+  enabled: false # no news items yet
   scrollable: true # adds a vertical scroll bar if there are more than 3 news items
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 latest_posts:
-  enabled: true
+  enabled: false # no blog posts yet
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
-Hi, my name is Ammar and I study computer science and mathematics to pursue theoretical machine learning, especially diffusion models and neural networks.
 
-I am a BSc Computer Science and Mathematics undergraduate at The University of Manchester with a focus on machine learning, mathematical foundations, and model design. My interests sit at the intersection of theoretical machine learning, diffusion, and neural networks, and I enjoy turning research ideas into working systems that are useful, measurable, and well-engineered.
+I am an undergraduate in Computer Science and Mathematics at The University of Manchester. My interest is theoretical machine learning: the mathematics that explains why training works, when it fails, and what a network has actually learned by the time it converges. Diffusion models and the analysis of training dynamics take up most of my reading.
 
-Alongside my studies, I have built experience across machine learning, forecasting, backend engineering, and technical communication. I enjoy working on projects that combine rigorous thinking with practical implementation, whether that means building a regime forecaster, improving inference latency, or developing educational workshops for other students.
+I work on questions I cannot settle by reading alone, so most of my projects exist because I wanted to check something. That has meant reimplementing methods from papers to see whether the reported behaviour survives contact with a different dataset, probing what representations a trained model relies on, and writing the numerical machinery from scratch when an existing library hides the part I want to inspect. The [projects]({{ '/projects/' | relative_url }}) page collects the ones worth reading.
 
-My background has also made me comfortable moving between research-style exploration and software delivery. I like understanding a problem deeply, testing assumptions carefully, and then building something reliable around that understanding.
+The applied side of my work has been in quantitative modelling and backend engineering. At Level2 I built a Gaussian hidden Markov model for intra-day market regime detection, then a live forecaster using temporal convolutional networks and PatchTST with Monte Carlo dropout for uncertainty, which reached 76.1% AUC on SPY. At Mubit-AI I rewrote a prompt-to-model recommender to cut token use, and at JustEat Takeaway I profiled a Go microservice with pprof and benchmarking to reduce its latency and allocation count.
 
-Looking ahead, I am aiming for a Research Engineer or Research Scientist role where I can contribute to applied machine learning, improve model behaviour, and keep growing my understanding of modern neural methods.
+I also lead projects for the Manchester AI Society, where I have taught machine learning to more than 75 students, run a game theory workshop, and built the real-time multiplayer backend for a computational poker competition in FastAPI and WebSockets.
+
+I am looking for research engineer and research scientist work. If you want to talk about diffusion models, generalisation theory, or anything on this site, my email is above.

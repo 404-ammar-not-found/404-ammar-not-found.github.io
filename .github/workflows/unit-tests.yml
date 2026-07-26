@@ -1,42 +1,11 @@
 name: Integration tests
 
+# Manual only. test/integration_comments.sh and test/integration_distill.sh assert
+# against the al-folio demo posts (_posts/2022-12-10-giscus-comments.md and
+# _posts/2018-12-22-distill.md), which this site no longer carries. Restore those
+# two posts before putting this back on push.
 on:
-  push:
-    branches:
-      - master
-      - main
-      - v1.0-dev
-    paths:
-      - "Gemfile"
-      - "Gemfile.lock"
-      - "_config.yml"
-      - "_data/**"
-      - "_pages/**"
-      - "_posts/**"
-      - "_projects/**"
-      - "assets/**"
-      - "test/**"
-      - "package.json"
-      - "package-lock.json"
-      - ".github/workflows/unit-tests.yml"
-  pull_request:
-    branches:
-      - master
-      - main
-      - v1.0-dev
-    paths:
-      - "Gemfile"
-      - "Gemfile.lock"
-      - "_config.yml"
-      - "_data/**"
-      - "_pages/**"
-      - "_posts/**"
-      - "_projects/**"
-      - "assets/**"
-      - "test/**"
-      - "package.json"
-      - "package-lock.json"
-      - ".github/workflows/unit-tests.yml"
+  workflow_dispatch:
 
 jobs:
   comments-integration-tests:
