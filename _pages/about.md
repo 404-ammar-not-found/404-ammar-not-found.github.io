@@ -27,12 +27,12 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I am an undergraduate studying Computer Science and Mathematics at The University of Manchester. My interest is the theory of machine learning. I have recently taken more of an interest into diffusion models and neural ODE/SDEs. Outside of research, I like building products and useful tools for people to use. I have been exploring more into roles such as AI engineer. 
+I am an undergraduate studying Computer Science and Mathematics at The University of Manchester. My interest is the theory of machine learning. I have recently taken more of an interest into diffusion models and neural ODE/SDEs. Outside of research, I like building products and useful tools for people to use. I have been exploring more into roles such as AI engineer.
 
 ## Projects
 
-The [projects]({{ '/projects/' | relative_url }}) page shows my projects however for an indepth look please go onto my Github which is linked below. 
+The [projects]({{ '/projects/' | relative_url }}) page shows my projects however for an indepth look please go onto my Github which is linked below.
 
 ## Contact
 
-I am looking for software engineer, ML engineer, research engineer or research scientist positions. My email address is above, and I am glad to discuss anything about machine learning or deep learning. 
+I am looking for software engineer, ML engineer, research engineer or research scientist positions. My email address is above, and I am glad to discuss anything about machine learning or deep learning.

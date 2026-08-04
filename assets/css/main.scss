@@ -1,0 +1,504 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+/* -----------------------------------------------------------------------------
+ * Local override of al_folio_core's `assets/css/main.scss`.
+ *
+ * The `@use` block below is a verbatim copy of the gem file so the base theme
+ * still compiles from the gem's `_sass/` partials. Everything after the
+ * "SITE DESIGN LAYER" banner is this site's own work and is what makes the
+ * override worth keeping.
+ *
+ * Acknowledged in `.al-folio-overrides.yml`. When `al_folio_core` bumps, run
+ * `bundle exec al-folio upgrade overrides diff assets/css/main.scss` and
+ * re-sync the @use block if upstream changed it.
+ * -------------------------------------------------------------------------- */
+
+/* Built-in Sass modules you’ll likely use across partials */
+@use "sass:math";
+@use "sass:string";
+
+/* Configure your design tokens BEFORE loading any of your partials.
+   Make sure `_sass/_variables.scss` declares `$max-content-width: 72rem !default;` */
+@use "variables" with (
+  $max-content-width: {{ site.max_width | default:  "930px" }}
+);
+
+/* Your project partials — convert these files to `@use "variables";`
+   (or `@use "variables" as *;`) inside each file and qualify variables if needed. */
+@use "themes";
+@use "layout";
+
+// Core styles organized by usage
+@use "typography";
+@use "navbar";
+@use "footer";
+@use "blog";
+@use "publications";
+@use "components";
+@use "utilities";
+
+// Other specialized styles
+@use "tabs";
+@use "teachings";
+@use "typograms";
+
+/* =============================================================================
+ * SITE DESIGN LAYER
+ *
+ * Editorial direction borrowed from pair.withgoogle.com: warm paper canvas, one
+ * hot accent, geometric display type over a humanist body face, very large
+ * radii, and surfaces that separate by tone rather than by rule.
+ *
+ * Most of the work is done by remapping the theme's own `--global-*` tokens, so
+ * gem-owned components (publications, CV, TOC, cards, search) follow along for
+ * free. Only the handful of components below need structural CSS.
+ * ========================================================================== */
+
+/* -- Tokens ---------------------------------------------------------------- */
+
+:root {
+  --pair-canvas: #fbfaf7;
+  --pair-surface: #ffffff;
+  --pair-surface-alt: #f2f1ea;
+  --pair-ink: #1a1c19;
+  --pair-ink-muted: #5f6360;
+  /* PAIR's pink is #fd4376; darkened here to clear 4.5:1 on the paper canvas.
+     The original stays as the decorative-only tone. */
+  --pair-accent: #d2295c;
+  --pair-accent-bright: #fd4376;
+  --pair-line: rgba(26, 28, 25, 0.09);
+
+  --pair-radius: 26px;
+  --pair-radius-sm: 14px;
+  --pair-shadow:
+    0 1px 2px rgba(26, 28, 25, 0.04),
+    0 16px 36px -14px rgba(26, 28, 25, 0.22);
+
+  --pair-display: "DM Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --pair-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Remap the theme's tokens onto the palette above. */
+  --global-bg-color: var(--pair-canvas);
+  --global-text-color: var(--pair-ink);
+  --global-text-color-light: var(--pair-ink-muted);
+  --global-theme-color: var(--pair-accent);
+  --global-hover-color: var(--pair-accent);
+  --global-hover-text-color: var(--pair-canvas);
+  --global-divider-color: var(--pair-line);
+  --global-card-bg-color: var(--pair-surface);
+  --global-code-bg-color: rgba(26, 28, 25, 0.05);
+  --global-footer-bg-color: var(--pair-surface-alt);
+  --global-footer-text-color: var(--pair-ink-muted);
+  --global-footer-link-color: var(--pair-ink);
+  --global-highlight-color: var(--pair-accent-bright);
+  --global-back-to-top-bg-color: var(--pair-ink);
+  --global-back-to-top-text-color: var(--pair-canvas);
+  --global-distill-app-color: var(--pair-ink-muted);
+  --global-newsletter-bg-color: var(--pair-surface);
+  --global-newsletter-text-color: var(--pair-ink);
+}
+
+/* `html[data-theme="dark"]` outranks `:root`, so the remap is repeated rather
+   than inherited. */
+html[data-theme="dark"] {
+  --pair-canvas: #121412;
+  --pair-surface: #1b1f1c;
+  --pair-surface-alt: #232823;
+  --pair-ink: #e7eae5;
+  --pair-ink-muted: #9aa29b;
+  --pair-accent: #9ee6c0;
+  --pair-accent-bright: #ff86a9;
+  --pair-line: rgba(231, 234, 229, 0.13);
+  --pair-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 16px 36px -14px rgba(0, 0, 0, 0.7);
+
+  --global-bg-color: var(--pair-canvas);
+  --global-text-color: var(--pair-ink);
+  --global-text-color-light: var(--pair-ink-muted);
+  --global-theme-color: var(--pair-accent);
+  --global-hover-color: var(--pair-accent);
+  --global-hover-text-color: var(--pair-canvas);
+  --global-divider-color: var(--pair-line);
+  --global-card-bg-color: var(--pair-surface);
+  --global-code-bg-color: rgba(231, 234, 229, 0.07);
+  --global-footer-bg-color: var(--pair-surface-alt);
+  --global-footer-text-color: var(--pair-ink-muted);
+  --global-footer-link-color: var(--pair-ink);
+  --global-highlight-color: var(--pair-accent-bright);
+  --global-back-to-top-bg-color: var(--pair-ink);
+  --global-back-to-top-text-color: var(--pair-canvas);
+  --global-distill-app-color: var(--pair-ink-muted);
+  --global-newsletter-bg-color: var(--pair-surface);
+  --global-newsletter-text-color: var(--pair-ink);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--pair-accent) 28%, transparent);
+}
+
+/* -- Typography ------------------------------------------------------------ */
+
+body {
+  font-family: var(--pair-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  letter-spacing: -0.004em;
+  background-color: var(--pair-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.post-title,
+.card-title,
+.navbar-brand {
+  font-family: var(--pair-display);
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+}
+
+.post-header {
+  margin-bottom: 2.75rem;
+}
+
+.post-title {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  margin-bottom: 0.6rem;
+}
+
+.post-header .desc,
+.post-header .post-description {
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: var(--pair-ink-muted);
+  max-width: 46ch;
+  margin-bottom: 0;
+}
+
+/* `:not([class])` keeps this to prose headings — component headings such as
+   `.card-title` and `.category` are also h2/h3 and carry their own rhythm. */
+article h2:not([class]) {
+  font-size: clamp(1.5rem, 3.2vw, 1.9rem);
+  margin-top: 3.25rem;
+  margin-bottom: 1rem;
+}
+
+article h3:not([class]) {
+  font-size: 1.375rem;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+article p {
+  margin-bottom: 1.35rem;
+  max-width: 72ch;
+}
+
+article a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: color-mix(in srgb, var(--pair-accent) 45%, transparent);
+  transition: text-decoration-color 0.18s ease;
+}
+
+article a:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-color: currentcolor;
+}
+
+/* -- Navigation: a floating pill instead of a full-width bar --------------- */
+
+body.fixed-top-nav {
+  padding-top: 96px;
+}
+
+.navbar.fixed-top {
+  background-color: transparent;
+  border-bottom: 0;
+  opacity: 1;
+  padding: 0.85rem 1rem;
+}
+
+.navbar.fixed-top > .container {
+  background-color: color-mix(in srgb, var(--pair-surface) 88%, transparent);
+  backdrop-filter: saturate(1.5) blur(14px);
+  -webkit-backdrop-filter: saturate(1.5) blur(14px);
+  border: 1px solid var(--pair-line);
+  border-radius: 22px;
+  padding: 0.4rem 0.75rem;
+  box-shadow: var(--pair-shadow);
+}
+
+/* Shrink the pill to its contents once the menu is laid out horizontally; below
+   the collapse breakpoint it has to stay full width for the drawer. */
+@media (min-width: 576px) {
+  .navbar.fixed-top > .container {
+    width: fit-content;
+    margin-inline: auto;
+  }
+}
+
+.navbar.navbar-light .navbar-nav .nav-item .nav-link {
+  font-family: var(--pair-display);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.navbar.navbar-light .navbar-nav .nav-item .nav-link:hover {
+  background-color: color-mix(in srgb, var(--pair-accent) 12%, transparent);
+  color: var(--pair-ink);
+}
+
+.navbar.navbar-light .navbar-nav .nav-item.active > .nav-link {
+  font-weight: 500;
+  color: var(--pair-ink);
+  background-color: color-mix(in srgb, var(--pair-accent) 16%, transparent);
+}
+
+#search-toggle .nav-link {
+  font-size: 0.8125rem;
+  color: var(--pair-ink-muted);
+  border: 1px solid var(--pair-line);
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+}
+
+#search-toggle:hover .nav-link {
+  color: var(--pair-ink);
+  border-color: color-mix(in srgb, var(--pair-accent) 45%, transparent);
+}
+
+/* al_folio_core's progress-bar.js measures the navbar and writes `top` inline,
+   which parked the reading hairline across the middle of the page now that the
+   nav floats. `!important` is the only lever over an inline style. */
+progress#progress {
+  top: 0 !important;
+  height: 2px;
+}
+
+/* -- Profile block --------------------------------------------------------- */
+
+.profile img {
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--pair-accent) 10%, transparent);
+}
+
+.profile figure {
+  margin-bottom: 1.25rem;
+}
+
+/* Below the float breakpoint the profile stacks above the prose and needs its
+   own gap. */
+@media (max-width: 575.98px) {
+  .profile {
+    margin-bottom: 2rem;
+  }
+}
+
+.profile .more-info {
+  font-family: var(--pair-body);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--pair-ink-muted);
+  border-left: 2px solid color-mix(in srgb, var(--pair-accent) 50%, transparent);
+  padding-left: 0.85rem;
+
+  p {
+    display: block;
+  }
+}
+
+/* -- Cards ----------------------------------------------------------------- */
+
+.card {
+  border: 1px solid var(--pair-line);
+  border-radius: var(--pair-radius);
+  box-shadow: none;
+  overflow: hidden;
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-text {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--pair-ink-muted);
+  }
+}
+
+.hoverable:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--pair-shadow);
+  border-color: color-mix(in srgb, var(--pair-accent) 35%, var(--pair-line));
+}
+
+.projects a,
+.projects a:hover {
+  text-decoration: none;
+}
+
+/* The base theme renders these as a faint right-aligned watermark; promote them
+   to real left-aligned section headers. */
+.projects h2.category {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  color: var(--pair-ink);
+  text-align: left;
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+  padding-top: 0;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--pair-line);
+}
+
+/* -- Social chips ---------------------------------------------------------- */
+
+.social {
+  margin-top: 3.5rem;
+
+  .contact-icons {
+    font-size: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.85rem;
+      height: 2.85rem;
+      border-radius: 999px;
+      background-color: var(--pair-surface);
+      border: 1px solid var(--pair-line);
+      font-size: 1.125rem;
+      /* `.social` sits inside `<article>`, so the prose underline would otherwise
+         run under the icon glyphs. */
+      text-decoration: none;
+      transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        border-color 0.18s ease;
+
+      i::before {
+        color: var(--pair-ink);
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        background-color: var(--pair-accent);
+        border-color: transparent;
+
+        i::before {
+          color: var(--pair-canvas);
+        }
+      }
+    }
+  }
+
+  .contact-note {
+    margin-top: 1.25rem;
+    font-size: 0.8125rem;
+    color: var(--pair-ink-muted);
+  }
+}
+
+/* -- Prose furniture ------------------------------------------------------- */
+
+blockquote {
+  background-color: var(--pair-surface-alt);
+  border-left-width: 0;
+  border-radius: var(--pair-radius-sm);
+  padding: 1.25rem 1.5rem;
+  font-size: 1.0625rem;
+}
+
+blockquote[class*="block-"] {
+  border-left-width: 5px;
+}
+
+:not(pre) > code {
+  padding: 0.12em 0.38em;
+  border-radius: 6px;
+  color: var(--pair-ink);
+}
+
+pre,
+figure.highlight {
+  border-radius: var(--pair-radius-sm);
+}
+
+pre {
+  padding: 1rem 1.15rem;
+}
+
+hr {
+  margin: 3rem 0;
+}
+
+/* -- Footer ---------------------------------------------------------------- */
+
+footer.sticky-bottom {
+  background-color: transparent;
+  border-top: 1px solid var(--pair-line);
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  font-size: 0.8125rem;
+  color: var(--pair-ink-muted);
+
+  a {
+    color: var(--pair-ink);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--pair-accent);
+      text-decoration: underline;
+    }
+  }
+}
+
+footer.fixed-bottom {
+  background-color: var(--pair-surface-alt);
+  border-top: 1px solid var(--pair-line);
+}
+
+#back-to-top {
+  border-radius: 999px !important;
+}
+
+/* -- Reduced motion -------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar.navbar-light .navbar-nav .nav-item .nav-link,
+  .social .contact-icons a,
+  article a {
+    transition: none;
+  }
+
+  .social .contact-icons a:hover {
+    transform: none;
+  }
+}
