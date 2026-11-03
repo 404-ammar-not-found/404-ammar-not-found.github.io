@@ -46,11 +46,13 @@
 @use "typograms";
 
 /* =============================================================================
- * SITE DESIGN LAYER
+ * SITE DESIGN LAYER — "halo"
  *
- * Editorial direction borrowed from pair.withgoogle.com: warm paper canvas, one
- * hot accent, geometric display type over a humanist body face, very large
- * radii, and surfaces that separate by tone rather than by rule.
+ * Structure from the viswa.space style (monospace type, bordered cards,
+ * section headers with a hairline rule, one blue accent, press feedback),
+ * opened up with an Apple-inspired light: mist-white canvas, a fixed radial
+ * sky-glow, generous spacing, soft blue-tinted ambient shadows and a
+ * translucent blurred navbar. Light-only by design.
  *
  * Most of the work is done by remapping the theme's own `--global-*` tokens, so
  * gem-owned components (publications, CV, TOC, cards, search) follow along for
@@ -60,94 +62,80 @@
 /* -- Tokens ---------------------------------------------------------------- */
 
 :root {
-  --pair-canvas: #fbfaf7;
-  --pair-surface: #ffffff;
-  --pair-surface-alt: #f2f1ea;
-  --pair-ink: #1a1c19;
-  --pair-ink-muted: #5f6360;
-  /* PAIR's pink is #fd4376; darkened here to clear 4.5:1 on the paper canvas.
-     The original stays as the decorative-only tone. */
-  --pair-accent: #d2295c;
-  --pair-accent-bright: #fd4376;
-  --pair-line: rgba(26, 28, 25, 0.09);
+  --halo-canvas: #fbfbfd;
+  --halo-surface: #ffffff;
+  --halo-surface-alt: #f5f5f7;
+  --halo-ink: #1d1d1f;
+  --halo-ink-muted: #6e6e73;
+  --halo-ink-meta: #86868b;
+  --halo-accent: #0071e3;
+  --halo-accent-hover: #0077ed;
+  --halo-accent-soft: rgba(0, 113, 227, 0.1);
+  --halo-line: rgba(29, 29, 31, 0.09);
 
-  --pair-radius: 26px;
-  --pair-radius-sm: 14px;
-  --pair-shadow:
-    0 1px 2px rgba(26, 28, 25, 0.04),
-    0 16px 36px -14px rgba(26, 28, 25, 0.22);
+  --halo-radius: 18px;
+  --halo-radius-sm: 12px;
+  --halo-shadow:
+    0 1px 2px rgba(29, 29, 31, 0.03),
+    0 10px 30px -18px rgba(0, 113, 227, 0.18);
+  --halo-shadow-hover:
+    0 2px 6px rgba(29, 29, 31, 0.05),
+    0 24px 48px -20px rgba(0, 113, 227, 0.3);
 
-  --pair-display: "DM Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --pair-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --halo-mono: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
   /* Remap the theme's tokens onto the palette above. */
-  --global-bg-color: var(--pair-canvas);
-  --global-text-color: var(--pair-ink);
-  --global-text-color-light: var(--pair-ink-muted);
-  --global-theme-color: var(--pair-accent);
-  --global-hover-color: var(--pair-accent);
-  --global-hover-text-color: var(--pair-canvas);
-  --global-divider-color: var(--pair-line);
-  --global-card-bg-color: var(--pair-surface);
-  --global-code-bg-color: rgba(26, 28, 25, 0.05);
-  --global-footer-bg-color: var(--pair-surface-alt);
-  --global-footer-text-color: var(--pair-ink-muted);
-  --global-footer-link-color: var(--pair-ink);
-  --global-highlight-color: var(--pair-accent-bright);
-  --global-back-to-top-bg-color: var(--pair-ink);
-  --global-back-to-top-text-color: var(--pair-canvas);
-  --global-distill-app-color: var(--pair-ink-muted);
-  --global-newsletter-bg-color: var(--pair-surface);
-  --global-newsletter-text-color: var(--pair-ink);
-}
-
-/* `html[data-theme="dark"]` outranks `:root`, so the remap is repeated rather
-   than inherited. */
-html[data-theme="dark"] {
-  --pair-canvas: #121412;
-  --pair-surface: #1b1f1c;
-  --pair-surface-alt: #232823;
-  --pair-ink: #e7eae5;
-  --pair-ink-muted: #9aa29b;
-  --pair-accent: #9ee6c0;
-  --pair-accent-bright: #ff86a9;
-  --pair-line: rgba(231, 234, 229, 0.13);
-  --pair-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.4),
-    0 16px 36px -14px rgba(0, 0, 0, 0.7);
-
-  --global-bg-color: var(--pair-canvas);
-  --global-text-color: var(--pair-ink);
-  --global-text-color-light: var(--pair-ink-muted);
-  --global-theme-color: var(--pair-accent);
-  --global-hover-color: var(--pair-accent);
-  --global-hover-text-color: var(--pair-canvas);
-  --global-divider-color: var(--pair-line);
-  --global-card-bg-color: var(--pair-surface);
-  --global-code-bg-color: rgba(231, 234, 229, 0.07);
-  --global-footer-bg-color: var(--pair-surface-alt);
-  --global-footer-text-color: var(--pair-ink-muted);
-  --global-footer-link-color: var(--pair-ink);
-  --global-highlight-color: var(--pair-accent-bright);
-  --global-back-to-top-bg-color: var(--pair-ink);
-  --global-back-to-top-text-color: var(--pair-canvas);
-  --global-distill-app-color: var(--pair-ink-muted);
-  --global-newsletter-bg-color: var(--pair-surface);
-  --global-newsletter-text-color: var(--pair-ink);
+  --global-bg-color: var(--halo-canvas);
+  --global-text-color: var(--halo-ink);
+  --global-text-color-light: var(--halo-ink-muted);
+  --global-theme-color: var(--halo-accent);
+  --global-hover-color: var(--halo-accent-hover);
+  --global-hover-text-color: #ffffff;
+  --global-divider-color: var(--halo-line);
+  --global-card-bg-color: var(--halo-surface);
+  --global-code-bg-color: rgba(29, 29, 31, 0.045);
+  --global-footer-bg-color: transparent;
+  --global-footer-text-color: var(--halo-ink-muted);
+  --global-footer-link-color: var(--halo-ink);
+  --global-highlight-color: var(--halo-accent);
+  --global-back-to-top-bg-color: var(--halo-ink);
+  --global-back-to-top-text-color: var(--halo-canvas);
+  --global-distill-app-color: var(--halo-ink-muted);
+  --global-newsletter-bg-color: var(--halo-surface);
+  --global-newsletter-text-color: var(--halo-ink);
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--pair-accent) 28%, transparent);
+  background: rgba(0, 113, 227, 0.22);
+}
+
+:focus-visible {
+  outline: 2px solid var(--halo-accent);
+  outline-offset: 2px;
+}
+
+/* -- Canvas: a fixed sky-glow behind everything ----------------------------- */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(85% 55% at 50% -12%, rgba(168, 208, 255, 0.5), transparent 70%),
+    radial-gradient(40% 30% at 88% 0%, rgba(255, 244, 223, 0.35), transparent 70%);
 }
 
 /* -- Typography ------------------------------------------------------------ */
 
 body {
-  font-family: var(--pair-body);
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  letter-spacing: -0.004em;
-  background-color: var(--pair-canvas);
+  font-family: var(--halo-mono);
+  font-size: 1rem;
+  line-height: 1.75;
+  background-color: var(--halo-canvas);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -161,142 +149,175 @@ h6,
 .post-title,
 .card-title,
 .navbar-brand {
-  font-family: var(--pair-display);
+  font-family: var(--halo-mono);
   font-weight: 500;
-  line-height: 1.14;
+  line-height: 1.2;
   letter-spacing: -0.025em;
 }
 
 .post-header {
-  margin-bottom: 2.75rem;
+  margin-bottom: 3rem;
 }
 
 .post-title {
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
-  margin-bottom: 0.6rem;
+  font-size: clamp(2.125rem, 5vw, 3rem);
+  margin-bottom: 0.75rem;
 }
 
 .post-header .desc,
 .post-header .post-description {
-  font-size: 1.125rem;
-  line-height: 1.55;
-  color: var(--pair-ink-muted);
-  max-width: 46ch;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--halo-ink-muted);
+  max-width: 52ch;
   margin-bottom: 0;
 }
 
 /* `:not([class])` keeps this to prose headings — component headings such as
    `.card-title` and `.category` are also h2/h3 and carry their own rhythm. */
 article h2:not([class]) {
-  font-size: clamp(1.5rem, 3.2vw, 1.9rem);
+  font-size: clamp(1.375rem, 2.5vw, 1.625rem);
   margin-top: 3.25rem;
   margin-bottom: 1rem;
 }
 
 article h3:not([class]) {
-  font-size: 1.375rem;
+  font-size: 1.1875rem;
   margin-top: 2.25rem;
   margin-bottom: 0.75rem;
 }
 
+article h4:not([class]) {
+  font-size: 1.0625rem;
+}
+
 article p {
   margin-bottom: 1.35rem;
-  max-width: 72ch;
+  max-width: 66ch;
 }
 
 article a {
+  color: var(--halo-accent);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  text-decoration-color: color-mix(in srgb, var(--pair-accent) 45%, transparent);
-  transition: text-decoration-color 0.18s ease;
+  text-underline-offset: 0.25em;
+  text-decoration-color: rgba(0, 113, 227, 0.4);
+  transition: color 0.2s var(--ease-out), text-decoration-color 0.2s var(--ease-out);
 }
 
 article a:hover {
+  color: var(--halo-accent-hover);
   text-decoration-thickness: 2px;
   text-decoration-color: currentcolor;
 }
 
-/* -- Navigation: a floating pill instead of a full-width bar --------------- */
+/* -- Entrance: a soft rise as the page materializes ------------------------- */
 
-body.fixed-top-nav {
-  padding-top: 96px;
-}
+@keyframes halo-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 
-.navbar.fixed-top {
-  background-color: transparent;
-  border-bottom: 0;
-  opacity: 1;
-  padding: 0.85rem 1rem;
-}
-
-.navbar.fixed-top > .container {
-  background-color: color-mix(in srgb, var(--pair-surface) 88%, transparent);
-  backdrop-filter: saturate(1.5) blur(14px);
-  -webkit-backdrop-filter: saturate(1.5) blur(14px);
-  border: 1px solid var(--pair-line);
-  border-radius: 22px;
-  padding: 0.4rem 0.75rem;
-  box-shadow: var(--pair-shadow);
-}
-
-/* Shrink the pill to its contents once the menu is laid out horizontally; below
-   the collapse breakpoint it has to stay full width for the drawer. */
-@media (min-width: 576px) {
-  .navbar.fixed-top > .container {
-    width: fit-content;
-    margin-inline: auto;
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
+/* `backwards` (not `both`): the fill ends with the animation, so a completed
+   entrance never pins `transform` and card hovers keep working. */
+@media (prefers-reduced-motion: no-preference) {
+  .post-header,
+  .profile figure {
+    animation: halo-rise 0.55s var(--ease-out) backwards;
+  }
+
+  .card {
+    animation: halo-rise 0.6s var(--ease-out) backwards;
+  }
+
+  .card:nth-child(2) { animation-delay: 0.05s; }
+  .card:nth-child(3) { animation-delay: 0.1s; }
+  .card:nth-child(4) { animation-delay: 0.15s; }
+  .card:nth-child(5) { animation-delay: 0.2s; }
+  .card:nth-child(6) { animation-delay: 0.25s; }
+  .card:nth-child(n + 7) { animation-delay: 0.3s; }
+}
+
+/* -- Navigation: a translucent full-width bar ------------------------------- */
+
+body.fixed-top-nav {
+  padding-top: 64px;
+}
+
+.navbar.fixed-top {
+  background-color: rgba(251, 251, 253, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--halo-line);
+  min-height: 64px;
+  padding: 0.35rem 0;
+}
+
+.navbar-brand {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* The gem styles the nav through `.navbar.navbar-light …` selectors; match
+   that prefix so these rules tie on specificity and win on source order. */
 .navbar.navbar-light .navbar-nav .nav-item .nav-link {
-  font-family: var(--pair-display);
-  font-size: 0.9375rem;
+  font-family: var(--halo-mono);
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: -0.01em;
-  padding: 0.35rem 0.85rem;
+  padding: 0.4rem 0.9rem;
   border-radius: 999px;
   transition:
-    background-color 0.18s ease,
-    color 0.18s ease;
+    background-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out);
 }
 
 .navbar.navbar-light .navbar-nav .nav-item .nav-link:hover {
-  background-color: color-mix(in srgb, var(--pair-accent) 12%, transparent);
-  color: var(--pair-ink);
+  background-color: var(--halo-accent-soft);
+  color: var(--halo-ink);
 }
 
 .navbar.navbar-light .navbar-nav .nav-item.active > .nav-link {
   font-weight: 500;
-  color: var(--pair-ink);
-  background-color: color-mix(in srgb, var(--pair-accent) 16%, transparent);
+  color: #ffffff;
+  background-color: var(--halo-accent);
+}
+
+.navbar.navbar-light .navbar-nav .nav-item.active > .nav-link:hover {
+  color: #ffffff;
 }
 
 #search-toggle .nav-link {
   font-size: 0.8125rem;
-  color: var(--pair-ink-muted);
-  border: 1px solid var(--pair-line);
+  color: var(--halo-ink-muted);
+  border: 1px solid var(--halo-line);
   border-radius: 999px;
-  padding: 0.28rem 0.7rem;
+  padding: 0.3rem 0.75rem;
 }
 
 #search-toggle:hover .nav-link {
-  color: var(--pair-ink);
-  border-color: color-mix(in srgb, var(--pair-accent) 45%, transparent);
+  color: var(--halo-ink);
+  border-color: rgba(0, 113, 227, 0.45);
 }
 
-/* al_folio_core's progress-bar.js measures the navbar and writes `top` inline,
-   which parked the reading hairline across the middle of the page now that the
-   nav floats. `!important` is the only lever over an inline style. */
 progress#progress {
-  top: 0 !important;
   height: 2px;
 }
 
 /* -- Profile block --------------------------------------------------------- */
 
 .profile img {
-  box-shadow: 0 0 0 8px color-mix(in srgb, var(--pair-accent) 10%, transparent);
+  box-shadow:
+    0 0 0 6px var(--halo-surface),
+    0 0 0 7px var(--halo-line),
+    0 16px 36px -12px rgba(0, 113, 227, 0.28);
 }
 
 .profile figure {
@@ -312,11 +333,10 @@ progress#progress {
 }
 
 .profile .more-info {
-  font-family: var(--pair-body);
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  color: var(--pair-ink-muted);
-  border-left: 2px solid color-mix(in srgb, var(--pair-accent) 50%, transparent);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--halo-ink-muted);
+  border-left: 2px solid rgba(0, 113, 227, 0.5);
   padding-left: 0.85rem;
 
   p {
@@ -324,35 +344,44 @@ progress#progress {
   }
 }
 
-/* -- Cards ----------------------------------------------------------------- */
+/* -- Cards: bordered surfaces carrying a little light ----------------------- */
 
 .card {
-  border: 1px solid var(--pair-line);
-  border-radius: var(--pair-radius);
-  box-shadow: none;
+  border: 1px solid var(--halo-line);
+  border-radius: var(--halo-radius);
+  box-shadow: var(--halo-shadow);
   overflow: hidden;
+  transition:
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out);
 
   .card-body {
-    padding: 1.5rem;
+    padding: 1.75rem;
   }
 
   .card-title {
-    font-size: 1.25rem;
+    font-size: 1.0625rem;
     margin-top: 0;
     margin-bottom: 0.5rem;
   }
 
   .card-text {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: var(--pair-ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--halo-ink-muted);
   }
 }
 
 .hoverable:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--pair-shadow);
-  border-color: color-mix(in srgb, var(--pair-accent) 35%, var(--pair-line));
+  transform: translateY(-4px);
+  box-shadow: var(--halo-shadow-hover);
+  border-color: rgba(0, 113, 227, 0.35);
+}
+
+.hoverable:active {
+  opacity: 0.75;
+  transition-duration: 0.1s;
 }
 
 .projects a,
@@ -361,22 +390,23 @@ progress#progress {
 }
 
 /* The base theme renders these as a faint right-aligned watermark; promote them
-   to real left-aligned section headers. */
+   to real left-aligned section headers with a hairline rule, as in the style
+   guide's section component. */
 .projects h2.category {
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
-  color: var(--pair-ink);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  color: var(--halo-ink);
   text-align: left;
-  margin-top: 3.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 4.5rem;
+  margin-bottom: 1.25rem;
   padding-top: 0;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--pair-line);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--halo-line);
 }
 
 /* -- Social chips ---------------------------------------------------------- */
 
 .social {
-  margin-top: 3.5rem;
+  margin-top: 4rem;
 
   .contact-icons {
     font-size: 1rem;
@@ -392,28 +422,29 @@ progress#progress {
       width: 2.85rem;
       height: 2.85rem;
       border-radius: 999px;
-      background-color: var(--pair-surface);
-      border: 1px solid var(--pair-line);
+      background-color: var(--halo-surface);
+      border: 1px solid var(--halo-line);
+      box-shadow: var(--halo-shadow);
       font-size: 1.125rem;
       /* `.social` sits inside `<article>`, so the prose underline would otherwise
          run under the icon glyphs. */
       text-decoration: none;
       transition:
-        transform 0.18s ease,
-        background-color 0.18s ease,
-        border-color 0.18s ease;
+        transform 0.2s var(--ease-out),
+        background-color 0.2s var(--ease-out),
+        border-color 0.2s var(--ease-out);
 
       i::before {
-        color: var(--pair-ink);
+        color: var(--halo-ink);
       }
 
       &:hover {
         transform: translateY(-2px);
-        background-color: var(--pair-accent);
+        background-color: var(--halo-accent);
         border-color: transparent;
 
         i::before {
-          color: var(--pair-canvas);
+          color: #ffffff;
         }
       }
     }
@@ -422,18 +453,18 @@ progress#progress {
   .contact-note {
     margin-top: 1.25rem;
     font-size: 0.8125rem;
-    color: var(--pair-ink-muted);
+    color: var(--halo-ink-muted);
   }
 }
 
 /* -- Prose furniture ------------------------------------------------------- */
 
 blockquote {
-  background-color: var(--pair-surface-alt);
+  background-color: var(--halo-surface-alt);
   border-left-width: 0;
-  border-radius: var(--pair-radius-sm);
+  border-radius: var(--halo-radius-sm);
   padding: 1.25rem 1.5rem;
-  font-size: 1.0625rem;
+  font-size: 1rem;
 }
 
 blockquote[class*="block-"] {
@@ -441,18 +472,21 @@ blockquote[class*="block-"] {
 }
 
 :not(pre) > code {
-  padding: 0.12em 0.38em;
+  padding: 0.15em 0.4em;
   border-radius: 6px;
-  color: var(--pair-ink);
+  font-size: 0.85em;
+  color: var(--halo-ink);
+  background-color: var(--halo-surface-alt);
 }
 
 pre,
 figure.highlight {
-  border-radius: var(--pair-radius-sm);
+  border-radius: var(--halo-radius-sm);
+  border: 1px solid var(--halo-line);
 }
 
 pre {
-  padding: 1rem 1.15rem;
+  padding: 1.15rem 1.25rem;
 }
 
 hr {
@@ -463,26 +497,26 @@ hr {
 
 footer.sticky-bottom {
   background-color: transparent;
-  border-top: 1px solid var(--pair-line);
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
+  border-top: 1px solid var(--halo-line);
+  padding-top: 2.75rem;
+  padding-bottom: 2.75rem;
   font-size: 0.8125rem;
-  color: var(--pair-ink-muted);
+  color: var(--halo-ink-muted);
 
   a {
-    color: var(--pair-ink);
+    color: var(--halo-ink);
     text-decoration: none;
 
     &:hover {
-      color: var(--pair-accent);
+      color: var(--halo-accent);
       text-decoration: underline;
     }
   }
 }
 
 footer.fixed-bottom {
-  background-color: var(--pair-surface-alt);
-  border-top: 1px solid var(--pair-line);
+  background-color: rgba(251, 251, 253, 0.9);
+  border-top: 1px solid var(--halo-line);
 }
 
 #back-to-top {
@@ -492,12 +526,21 @@ footer.fixed-bottom {
 /* -- Reduced motion -------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
+  .post-header,
+  .profile figure,
+  .card {
+    animation: none;
+  }
+
+  .card,
+  .hoverable:hover,
   .navbar.navbar-light .navbar-nav .nav-item .nav-link,
   .social .contact-icons a,
   article a {
     transition: none;
   }
 
+  .hoverable:hover,
   .social .contact-icons a:hover {
     transform: none;
   }
