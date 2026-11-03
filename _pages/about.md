@@ -10,7 +10,6 @@ profile:
   image_circular: true # crops the image to make it circular
   more_info: >
     <p>The University of Manchester</p>
-    <p>London, GB</p>
     <p>ammar.nagri1@gmail.com</p>
 
 selected_papers: false # turn off until you have publication entries to highlight
