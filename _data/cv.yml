@@ -1,10 +1,7 @@
 cv:
   name: Ammar Nagri
-  label: BSc Computer Science and Mathematics undergraduate
   email: ammar.nagri1@gmail.com
   location: London, GB
-  image: /assets/img/prof_pic.jpg
-  summary: Computer Science and Mathematics undergraduate at The University of Manchester, working on theoretical machine learning, neural networks and diffusion models.
 
   social_networks:
     - network: GitHub
@@ -12,24 +9,22 @@ cv:
     - network: LinkedIn
       username: ammarnagri
 
-  address:
-    city: London
-    region: United Kingdom
-    countryCode: GB
-
   sections:
+    Profile:
+      - BSc Computer Science and Mathematics undergraduate at The University of Manchester, working on theoretical machine learning, neural networks and diffusion models.
+
     Education:
       - institution: The University of Manchester
         location: Manchester, GB
         url: https://www.manchester.ac.uk/
         area: Computer Science and Mathematics
-        studyType: Bachelor of Science
+        study_type: Bachelor of Science
         start_date: 2025-09
         end_date: 2028-06
         score: Projected First Class Honours
-        courses: "Probability I, MFA, Statistics I, Data Science, Introduction to Programming I (Python), Introduction to Programming II (Java), First Year Team Project"
         highlights:
           - Projected First Class Honours.
+          - "Coursework: Probability I, MFA, Statistics I, Data Science, Introduction to Programming I (Python), Introduction to Programming II (Java), First Year Team Project."
 
     Experience:
       - company: Manchester AI Society, The University of Manchester
@@ -37,8 +32,8 @@ cv:
         location: Manchester, GB
         start_date: 2025-09
         end_date: present
-        brief: Vice president running the society's ML workshop programme and its student project track.
         highlights:
+          - Vice president running the society's ML workshop programme and its student project track.
           - Vice President of the society; previously Project Leader (2025-2026).
           - Led workshops teaching machine learning to students, averaging 75 or more students with a 76% retention rate.
           - Architected and built an authoritative real-time multiplayer backend for poker using FastAPI and WebSockets.
@@ -49,8 +44,8 @@ cv:
         location: London, GB
         start_date: 2026-07
         end_date: 2026-09
-        brief: Software engineer working on the retrieval and storage layer of a memory system.
         highlights:
+          - Software engineer working on the retrieval and storage layer of a memory system.
           - Optimised memory retrieval by replacing an O(session size) scan with a near O(limit) reverse scan, achieving up to 2,500x faster limited-history lookups while preserving identical behaviour and chronological ordering.
           - Improved storage by implementing tiered per-column-family Zstd compression, reducing disk usage by 35% with minimal latency impact.
 
@@ -59,8 +54,8 @@ cv:
         location: New York, NY (Remote)
         start_date: 2026-01
         end_date: 2026-04
-        brief: Machine learning intern working on regime detection and forecasting for intraday market data.
         highlights:
+          - Machine learning intern working on regime detection and forecasting for intraday market data.
           - Built a Gaussian hidden Markov model classifier for the regime of intra-day market data.
           - Developed a live regime forecaster using temporal convolutional networks and PatchTST architectures, using Monte Carlo dropout for Bayesian uncertainty decomposition, achieving an AUC of 76.1% on SPY.
           - Presented my findings alongside fellow students, and am currently working on presenting to more financial startups.
@@ -70,50 +65,40 @@ cv:
         location: London, GB
         start_date: 2022-08
         end_date: 2022-08
-        brief: Software engineer working on order analytics microservices in Go.
         highlights:
+          - Software engineer working on order analytics microservices in Go.
           - Conducted Go benchmarking and pprof CPU and memory profiling to optimise a core microservice, achieving a 4x latency improvement, 3x fewer allocations and a 2x reduction in RSS memory usage.
           - Designed and implemented an HTTP endpoint for an order analytics microservice, handling query parsing, SQL database access and robust error handling, defined through OpenAPI specifications and supporting 700,000 daily requests.
           - Developed unit tests using httptest and validated functionality through Postman-based integration testing.
 
     Projects:
       - name: Changes in Stock Market Structure
-        summary: "Python, pandas, NumPy, scikit-learn, matplotlib, seaborn"
         start_date: 2026-06
         end_date: 2026-06
         highlights:
+          - "Stack: Python, pandas, NumPy, scikit-learn, matplotlib, seaborn."
           - Built a data pipeline to ingest S&P 500 historical constituents and Polygon market data, filtering prices to each stock's membership window before computing daily return correlation matrices and sector-level heatmaps.
           - Modelled evolving market structure with Graphical Lasso sparse partial-correlation networks and Affinity Propagation clustering, visualising annual changes through MDS-based network layouts and animated frames.
 
       - name: Particle Collision Data Analysis with ATLAS
-        summary: "NumPy, pandas, Jupyter, Git, matplotlib"
         start_date: 2023-09
         end_date: 2024-06
         highlights:
+          - "Stack: NumPy, pandas, Jupyter, Git, matplotlib."
           - Led a team of 5 students to reconstruct the Z0 boson and calculate its invariant mass using NumPy and pandas.
           - Attended a masterclass at the University of Oxford, presenting and defending our methodology and findings.
           - Co-authored a research poster and delivered a poster presentation at a London physics conference.
 
     Competitions and Awards:
-      - title: International Olympiad of AI, Silver
-        date: 2025-04
-        awarder: International Olympiad of AI
-        summary: Awarded Silver on examination performance.
-
-      - title: UKMT Junior, Intermediate and Senior Mathematics Challenges
-        date: 2024
-        awarder: United Kingdom Mathematics Trust
-        summary: Multiple Gold Awards across the Junior, Intermediate and Senior challenges between 2018 and 2024.
+      - label: International Olympiad of AI, Silver (2025)
+        details: Awarded Silver on examination performance.
+      - label: UKMT Mathematics Challenges (2018 to 2024)
+        details: Multiple Gold Awards across the Junior, Intermediate and Senior challenges, United Kingdom Mathematics Trust.
 
     Technical Skills:
-      - name: Languages
-        icon: fa-solid fa-code
-        keywords: "Python, Java, PostgreSQL, MySQL, Golang, R, TypeScript, C++, JavaScript, LaTeX"
-
-      - name: Libraries
-        icon: fa-solid fa-layer-group
-        keywords: "NumPy, pandas, matplotlib, scikit-learn, OpenCV, Hugging Face Transformers"
-
-      - name: Frameworks and Tooling
-        icon: fa-solid fa-gears
-        keywords: "PyTorch, TensorFlow, FastAPI, Pydantic, Docker, Git, Weights & Biases, AWS, pytest, pprof"
+      - label: Languages
+        details: Python, Java, PostgreSQL, MySQL, Golang, R, TypeScript, C++, JavaScript, LaTeX
+      - label: Libraries
+        details: NumPy, pandas, matplotlib, scikit-learn, OpenCV, Hugging Face Transformers
+      - label: Frameworks and tooling
+        details: PyTorch, TensorFlow, FastAPI, Pydantic, Docker, Git, Weights & Biases, AWS, pytest, pprof
