@@ -311,6 +311,25 @@ progress#progress {
   height: 2px;
 }
 
+/* -- One-pager navigation: no tabs ------------------------------------------ */
+
+/* The site reads as a single scrolling page: the tab links and the mobile
+   hamburger are removed; only the search control remains in the bar. */
+.navbar-toggler,
+.navbar .navbar-nav .nav-item:not(:has(#search-toggle)) {
+  display: none;
+}
+
+/* Under the collapse breakpoint the search control would be trapped inside the
+   collapsed drawer with no toggler left to open it — keep it in the bar. */
+@media (max-width: 575.98px) {
+  .navbar .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+    flex-grow: 0;
+  }
+}
+
 /* -- Profile block --------------------------------------------------------- */
 
 .profile img {
@@ -384,6 +403,40 @@ progress#progress {
   transition-duration: 0.1s;
 }
 
+/* Harsh project cards (/projects/): square, ink-bordered, full invert on
+   hover — same contract as the experience cards. */
+.projects .card {
+  border: 1px solid var(--halo-ink);
+  border-radius: 0;
+  box-shadow: none;
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-title {
+    font-weight: 700;
+  }
+
+  &:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: var(--halo-ink);
+    border-color: var(--halo-ink);
+
+    .card-title {
+      color: var(--halo-canvas);
+    }
+
+    .card-text,
+    .gh-icon,
+    .gh-icon::before,
+    .stars {
+      color: rgba(251, 251, 253, 0.72);
+    }
+  }
+}
+
 .projects a,
 .projects a:hover {
   text-decoration: none;
@@ -394,13 +447,391 @@ progress#progress {
    guide's section component. */
 .projects h2.category {
   font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--halo-ink);
   text-align: left;
   margin-top: 4.5rem;
   margin-bottom: 1.25rem;
   padding-top: 0;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--halo-line);
+  border-bottom: 1px solid var(--halo-ink);
+}
+
+/* -- Projects strip: a horizontally scrollable line of cards ---------------- */
+
+.project-strip-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--halo-ink);
+
+  .project-strip-all {
+    font-size: 0.8125rem;
+    color: var(--halo-accent);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s var(--ease-out);
+
+    &:hover {
+      color: var(--halo-accent-hover);
+      text-decoration: underline;
+    }
+  }
+}
+
+.project-strip {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.75rem 0.25rem 1.75rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 113, 227, 0.35) transparent;
+}
+
+.project-strip-card {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  width: min(320px, 78vw);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--halo-surface);
+  border: 1px solid var(--halo-ink);
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  text-decoration: none;
+  animation: halo-rise 0.6s var(--ease-out) backwards;
+  transition:
+    background-color 0.15s var(--ease-out),
+    border-color 0.15s var(--ease-out),
+    opacity 0.1s ease;
+
+  &:hover {
+    background-color: var(--halo-ink);
+    border-color: var(--halo-ink);
+    text-decoration: none;
+
+    .project-strip-category {
+      color: rgba(251, 251, 253, 0.62);
+    }
+
+    .project-strip-title {
+      color: var(--halo-canvas);
+    }
+
+    .project-strip-desc {
+      color: rgba(251, 251, 253, 0.72);
+    }
+
+    /* invert(1) flips lightness, hue-rotate(180deg) puts the hue back —
+       the blue viz strokes stay blue on the ink card. */
+    .project-strip-viz {
+      filter: invert(1) hue-rotate(180deg);
+    }
+  }
+
+  &:active {
+    opacity: 0.75;
+    transition-duration: 0.1s;
+  }
+
+  .project-strip-viz {
+    display: block;
+    width: 100%;
+    height: 118px;
+    background-color: var(--halo-surface);
+    border-bottom: 1px solid var(--halo-line);
+    flex: 0 0 auto;
+    transition: filter 0.15s var(--ease-out);
+  }
+
+  .project-strip-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.15rem 1.5rem 1.4rem;
+  }
+
+  .project-strip-category {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--halo-ink-meta);
+  }
+
+  .project-strip-title {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--halo-ink);
+  }
+
+  .project-strip-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--halo-ink-muted);
+  }
+}
+
+/* Stagger the strip entrance like the project grid cards. */
+.project-strip-card:nth-child(2) { animation-delay: 0.06s; }
+.project-strip-card:nth-child(3) { animation-delay: 0.12s; }
+.project-strip-card:nth-child(4) { animation-delay: 0.18s; }
+.project-strip-card:nth-child(5) { animation-delay: 0.24s; }
+.project-strip-card:nth-child(6) { animation-delay: 0.3s; }
+.project-strip-card:nth-child(n + 7) { animation-delay: 0.36s; }
+
+/* -- Projects page: xp cards as links --------------------------------------- */
+
+/* The projects grid reuses the experience card; as anchors they need the
+   underline suppressed and a press state to match the strip cards. */
+.xp-grid a.xp-card {
+  text-decoration: none;
+  cursor: pointer;
+
+  &:active {
+    opacity: 0.75;
+  }
+}
+
+/* -- Publications: venue panel on the cards --------------------------------- */
+
+/* A small bordered acceptance panel, square like the xp cards. Readable in
+   both card systems: the halo strip card and the invert-on-hover xp card. */
+.pub-venue {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-self: flex-start;
+  width: 100%;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--halo-accent);
+  background-color: rgba(0, 113, 227, 0.06);
+  border: 1px solid rgba(0, 113, 227, 0.35);
+  border-radius: 0;
+  padding: 0.35rem 0.6rem;
+}
+
+.pub-venue .pub-paper {
+  color: var(--halo-accent);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s var(--ease-out);
+
+  &:hover {
+    color: var(--halo-accent-hover);
+    text-decoration: underline;
+  }
+}
+
+/* Inside the strip card the panel sits where the category caption was. */
+.project-strip-card .pub-venue {
+  margin-bottom: 0.1rem;
+}
+
+/* Inside an xp card the hover inverts the surface; keep the panel legible. */
+.xp-card:hover .pub-venue {
+  color: #7fb8ff;
+  background-color: rgba(127, 184, 255, 0.08);
+  border-color: rgba(127, 184, 255, 0.45);
+
+  .pub-paper {
+    color: #7fb8ff;
+
+    &:hover {
+      color: #b9d8ff;
+    }
+  }
+}
+
+/* The title link inside a publication xp card. */
+.pub-card .pub-link {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* -- Experience grid: harsh, square, terminal-window cards ------------------ */
+
+/* Old-school on purpose: a solid ink rule under the header (not the faint
+   halo hairline), an uppercase bold title, square corners, 1px ink borders
+   and a full-invert press on hover. No shadows, no lift, no rounding. */
+
+.xp-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--halo-ink);
+
+  .xp-title {
+    margin: 0;
+    font-size: clamp(1.5rem, 3vw, 1.875rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--halo-ink);
+  }
+
+  .xp-view-all {
+    font-size: 0.8125rem;
+    color: var(--halo-accent);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s var(--ease-out);
+
+    &:hover {
+      color: var(--halo-accent-hover);
+      text-decoration: underline;
+    }
+  }
+}
+
+.xp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.75rem;
+  row-gap: 1.75rem;
+  padding-top: 1.75rem;
+}
+
+/* Homepage variant: every role in one horizontally scrollable row. */
+.xp-strip {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.75rem 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 113, 227, 0.35) transparent;
+
+  .xp-card {
+    flex: 0 0 auto;
+    width: min(320px, 78vw);
+    scroll-snap-align: start;
+  }
+}
+
+.xp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  background-color: var(--halo-surface);
+  border: 1px solid var(--halo-ink);
+  border-radius: 0;
+  transition: background-color 0.15s var(--ease-out);
+
+  &:hover {
+    background-color: var(--halo-ink);
+
+    .xp-co,
+    .xp-role {
+      color: var(--halo-canvas);
+    }
+
+    .xp-dates,
+    .xp-loc {
+      color: rgba(251, 251, 253, 0.62);
+    }
+
+    .xp-desc {
+      color: rgba(251, 251, 253, 0.72);
+    }
+
+    .xp-idx {
+      color: #7fb8ff;
+    }
+
+    .xp-foot {
+      border-top-color: rgba(251, 251, 253, 0.18);
+    }
+  }
+}
+
+.xp-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.xp-co {
+  font-weight: 700;
+  color: var(--halo-ink);
+}
+
+.xp-dates {
+  color: var(--halo-ink-meta);
+  white-space: nowrap;
+}
+
+.xp-role {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--halo-ink);
+}
+
+.xp-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--halo-ink-muted);
+}
+
+.xp-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--halo-line);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--halo-ink-meta);
+}
+
+.xp-idx {
+  color: var(--halo-accent);
+}
+
+@media (max-width: 767.98px) {
+  .xp-grid {
+    grid-template-columns: 1fr;
+    row-gap: 1.25rem;
+  }
+
+  .xp-rule {
+    display: none;
+  }
 }
 
 /* -- Social chips ---------------------------------------------------------- */
@@ -458,6 +889,15 @@ progress#progress {
 }
 
 /* -- Prose furniture ------------------------------------------------------- */
+
+/* Kramdown renders a bare `![alt](src)` as `<p><img></p>`. The source PNGs in
+   the project write-ups are 2000-5400px wide, so cap and centre them; inline
+   images that share a paragraph with text are left alone. */
+article p > img:only-child {
+  display: block;
+  max-width: min(100%, 640px);
+  margin-inline: auto;
+}
 
 blockquote {
   background-color: var(--halo-surface-alt);
@@ -528,12 +968,15 @@ footer.fixed-bottom {
 @media (prefers-reduced-motion: reduce) {
   .post-header,
   .profile figure,
-  .card {
+  .card,
+  .project-strip-card {
     animation: none;
   }
 
   .card,
   .hoverable:hover,
+  .project-strip-card,
+  .xp-card,
   .navbar.navbar-light .navbar-nav .nav-item .nav-link,
   .social .contact-icons a,
   article a {
@@ -541,6 +984,7 @@ footer.fixed-bottom {
   }
 
   .hoverable:hover,
+  .project-strip-card:hover,
   .social .contact-icons a:hover {
     transform: none;
   }

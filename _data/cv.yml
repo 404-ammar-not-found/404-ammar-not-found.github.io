@@ -32,11 +32,24 @@ cv:
           - Projected First Class Honours.
 
     Experience:
+      - company: Manchester AI Society, The University of Manchester
+        position: Vice President
+        location: Manchester, GB
+        start_date: 2025-09
+        end_date: present
+        brief: Vice president running the society's ML workshop programme and its student project track.
+        highlights:
+          - Vice President of the society; previously Project Leader (2025-2026).
+          - Led workshops teaching machine learning to students, averaging 75 or more students with a 76% retention rate.
+          - Architected and built an authoritative real-time multiplayer backend for poker using FastAPI and WebSockets.
+          - Optimised core components to reach 4M or more operations per second in rule evaluation, supporting 40 or more concurrent clients.
+
       - company: Mubit-AI
         position: Software Engineer
         location: London, GB
         start_date: 2026-07
         end_date: 2026-09
+        brief: Software engineer working on the retrieval and storage layer of a memory system.
         highlights:
           - Optimised memory retrieval by replacing an O(session size) scan with a near O(limit) reverse scan, achieving up to 2,500x faster limited-history lookups while preserving identical behaviour and chronological ordering.
           - Improved storage by implementing tiered per-column-family Zstd compression, reducing disk usage by 35% with minimal latency impact.
@@ -46,6 +59,7 @@ cv:
         location: New York, NY (Remote)
         start_date: 2026-01
         end_date: 2026-04
+        brief: Machine learning intern working on regime detection and forecasting for intraday market data.
         highlights:
           - Built a Gaussian hidden Markov model classifier for the regime of intra-day market data.
           - Developed a live regime forecaster using temporal convolutional networks and PatchTST architectures, using Monte Carlo dropout for Bayesian uncertainty decomposition, achieving an AUC of 76.1% on SPY.
@@ -56,20 +70,11 @@ cv:
         location: London, GB
         start_date: 2022-08
         end_date: 2022-08
+        brief: Software engineer working on order analytics microservices in Go.
         highlights:
           - Conducted Go benchmarking and pprof CPU and memory profiling to optimise a core microservice, achieving a 4x latency improvement, 3x fewer allocations and a 2x reduction in RSS memory usage.
           - Designed and implemented an HTTP endpoint for an order analytics microservice, handling query parsing, SQL database access and robust error handling, defined through OpenAPI specifications and supporting 700,000 daily requests.
           - Developed unit tests using httptest and validated functionality through Postman-based integration testing.
-
-      - company: Manchester AI Society, The University of Manchester
-        position: Project Leader
-        location: Manchester, GB
-        start_date: 2025-09
-        end_date: present
-        highlights:
-          - Led workshops teaching machine learning to students, averaging 75 or more students with a 76% retention rate.
-          - Architected and built an authoritative real-time multiplayer backend for poker using FastAPI and WebSockets.
-          - Optimised core components to reach 4M or more operations per second in rule evaluation, supporting 40 or more concurrent clients.
 
     Projects:
       - name: Changes in Stock Market Structure

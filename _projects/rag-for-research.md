@@ -1,45 +1,27 @@
 ---
 layout: page
 title: Retrieval-Augmented Question Answering with Chunk-Level Provenance
-description: A retrieval pipeline over research papers whose three-dimensional vector-store view highlights exactly which chunks grounded each answer.
+description: A chat over arXiv papers where every cited quote is checked verbatim against its passage and each sentence is entailment-verified.
 importance: 3
 category: Machine Learning Systems
+period: March 2026
+stack: Python · LangChain · React
 toc:
   sidebar: left
 ---
 
-**Repository:** [404-ammar-not-found/RAG-System-for-Research](https://github.com/404-ammar-not-found/RAG-System-for-Research) · **Written in:** Python, LangChain, ChromaDB, FastAPI, React, three.js · **Period:** March 2026
+**Repository:** [404-ammar-not-found/RAG-System-for-Research](https://github.com/404-ammar-not-found/RAG-System-for-Research) · **Written in:** Python, LangChain, ChromaDB, FastAPI, React · **Period:** March 2026
 
-Retrieval-augmented generation is usually evaluated on its answers, which is the wrong place to look when it fails. When the answer is wrong, the cause is almost always retrieval, and retrieval is the step the interface hides. This system, roughly 2,400 lines of first-party code across 34 files, makes retrieval the visible object: the vector store is rendered as a three-dimensional force-directed graph, and every answer carries the identifiers of the chunks which produced it, so the frontend can highlight precisely those nodes.
+## Introduction
 
-## Design goal
+An answer from an LLM about a set of papers is fluent and unverifiable at once: a wrong number reads the same as a right one, and the interface never shows which passage a claim came from. This project is a chat over twelve arXiv PDFs (about 5,100 lines of first-party code across 39 files) where every claim must cite a passage id with a verbatim quote; the quote is string-checked against that passage, an entailment call judges each sentence, and unsupported claims are flagged.
 
-The question I built this to answer was whether a reader could tell, at a glance, which part of a corpus a model had actually consulted. That requires provenance to survive the entire pipeline rather than being reconstructed afterwards, which in turn constrains how chunks are stored, prompted with, and returned.
+## How I did it
 
-## Method
+PyMuPDF parses each PDF into sections and typed blocks. Dehyphenation and reflow fixed 1051 broken words across the twelve papers. Sentence-aligned splitting moved chunks starting mid-sentence from 470 of 883 (53%) to 85 of 949 (9%), recall@8 flat, MRR 0.176 to 0.199; the residual 9% resume after equations or are table cell runs, the honest floor. Captions travel as atomic blocks, equation runs become math blocks that BM25 skips, and reference sections are dropped: keeping them cost recall@8 0.273 to 0.227 and 14% of embed spend. Ingest resumes by SHA-256 content hash. A title-and-section header on each chunk is embedded as a topical anchor and stripped from the lexical index. Embeddings default to Gemini gemini-embedding-2 (3072 dimensions) in a Chroma collection created with cosine distance; local all-MiniLM-L6-v2 (384 dimensions, onnxruntime) serves quota-limited setups in its own collection.
 
-### Ingestion
+Retrieval runs dense cosine search and an in-memory BM25 with Greek glyph folding (typed "beta1" finds β1) concurrently, fusing both by reciprocal rank fusion with k=60. A cap limits one paper to 4 passages, because 6 of the top 8 for a question once came from one paper. One listwise LLM call reranks 25 candidates to 8; prev/next chunks are fetched by id so the model reads contiguous text. The answering path is assembled by hand, with no RetrievalQA chain. FastAPI streams tokens, a cheap model condenses follow-ups into standalone queries, and stance labels applied before synthesis surface conflicting findings as a split. In the React frontend a citation opens its passage with the quoted span highlighted; the source PDF page can render behind it, and an SVG arc diagram maps which papers cite which, from metadata resolved across arXiv, Crossref, OpenAlex and Semantic Scholar, with retraction warnings where found.
 
-Each document is hashed with SHA-256 over its contents, so re-ingesting a corpus skips files already present in the store rather than duplicating them. Every chunk is prefixed with a `[source#chunkN]` marker which is embedded in the chunk text itself, so the marker survives into the prompt and the model can cite it directly. Embeddings come from the Gemini API and persist in a Chroma collection.
+## Details and clarifications
 
-### Retrieval and ranking
-
-The answering path is assembled by hand rather than delegated to an off-the-shelf `RetrievalQA` chain, because the intermediate rankings are the output of interest. A query expands into several variants; each variant retrieves independently; candidates are deduplicated by content fingerprint; the separate rankings are combined by reciprocal rank fusion with k=60; and the surviving candidates are reranked under a weighted blend of 0.6 cosine similarity, 0.25 rank agreement across variants, and 0.15 token overlap between query and chunk. The final context is then ordered round-robin across source documents, so a single paper with many strong chunks cannot crowd the other sources out of the window.
-
-### Interface
-
-FastAPI exposes upload and ask endpoints. An upload ingests the document and regenerates the graph; an ask returns the answer together with the chunk identifiers behind it. The React and three.js frontend renders chunks as nodes, joins them by both reading order and embedding similarity, and lights up the grounding chunks when an answer arrives.
-
-## Results
-
-The committed graph export comes from a genuine run over three papers, Attention Is All You Need, An Image is Worth 16x16 Words, and CNNpred. It contains 191 chunk nodes joined by 954 edges: 188 intra-document sequence edges preserving reading order, and 766 cosine-similarity edges above a 0.5 threshold, with no dangling references. The pipeline therefore runs end to end, and the provenance highlighting works on real retrieved output.
-
-## Limitations
-
-The measured half of this project does not exist, and that is the honest headline. There is no retrieval benchmark, no baseline comparing the fusion and reranking stack against plain top-k similarity search, and no ablation isolating any stage. Every constant is asserted rather than tuned: the 0.6, 0.25 and 0.15 rerank weights, the fusion constant k=60, the 0.5 similarity threshold for graph edges, and a retrieval depth of four from twenty candidates.
-
-The query expansion is also weaker than the term multi-query implies. Variants are produced by stopword removal, a minimum-length keyword filter, and a template string, not by model rewriting, so they very likely embed close to the original query. If so, the fusion machinery contributes little, and nothing in the repository currently measures whether it does.
-
-## Current work
-
-Building a question set with known relevant passages, scoring plain similarity retrieval against the full pipeline on it, and then ablating each stage. Without that, the ranking design is a hypothesis rather than a result.
+Provenance guarantees the quoted span exists in the passage it names; the character offsets are into the normalised indexed text, because a PDF has no stable character stream and two-column layout, ligature folding and reflow all move positions. Verification is one LLM call and can err; failures leave claims unchecked, and an unparseable reranker reply falls back to RRF order. Retrieval is evaluated offline through BM25 only, on a committed golden set scored through the same chunk builder the ingest uses, because the Gemini free tier allows 1000 embeddings per day; offline recall is a regression guard, since several golden questions name things the papers never call themselves. The constants (k=60, the cap of 4, chunk size 1200 with 150 overlap) are asserted. An earlier hybrid design, whose three fused scores all derived from one dense hit list, was replaced by BM25 as an independent channel.

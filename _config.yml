@@ -177,6 +177,8 @@ newsletter:
 collections:
   projects:
     output: true
+  publications:
+    output: true
 
 # -----------------------------------------------------------------------------
 # Jekyll settings
